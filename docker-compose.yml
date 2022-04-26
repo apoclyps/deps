@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  cli: &cli
+    build: .
+    command: python -m deps dashboard
+    working_dir: /usr/src/app/
+    environment:
+      - DEBUG=true
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+    volumes:
+      - "./:/usr/src/app/"
+    stdin_open: true
+    tty: true
+
+  test:
+    <<: *cli
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN-"token"}
+    command: pytest -s -vvv

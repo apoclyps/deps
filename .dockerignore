@@ -1,0 +1,21 @@
+# Docker ignore whitelist
+
+# Ignore everything
+*
+
+# except these items
+!.codespellrc
+!.flake8
+!.isort.cfg
+!.pylintrc
+!.pylintrc
+!cli-runner.py
+!cli.py
+!Makefile
+!mypy.ini
+!requirements_dev.txt
+!requirements.txt
+!deps
+!setup.cfg
+!setup.py
+!tests
