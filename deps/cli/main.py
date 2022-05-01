@@ -1,6 +1,8 @@
 import click
 from rich.console import Console
 
+from deps.pipenv.view import DependenciesView
+
 from ..version import __version__
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
@@ -22,8 +24,7 @@ def dashboard() -> None:
         deps dashboard
     """
     console = Console()
-
-    console.print("Deps")
+    DependenciesView(console=console).render()
 
 
 def main() -> None:
