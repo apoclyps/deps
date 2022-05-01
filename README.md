@@ -8,6 +8,19 @@
 
 Simplify managing dependencies within an all-in-one TUI dashboard.
 
+## How to use deps
+
+```bash
+pip install deps
+
+export GITHUB_USER="github-username"
+export GITHUB_ORG="org"
+export GITHUB_REPOSITORIES="repo_1,repo_2"
+export GITHUB_TOKEN="secret"
+
+deps dashboard
+```
+
 ## Getting started with local development
 
 To build and run the CLI on your host, you will need Python 3.9, pip, and virtualenv to build and run `review`.
