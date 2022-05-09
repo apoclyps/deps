@@ -10,3 +10,6 @@ GITHUB_REPOSITORIES = config("GITHUB_REPOSITORIES", cast=Csv())
 GITHUB_TOKEN = config("GITHUB_TOKEN", cast=str)
 GITHUB_URL = config("GITHUB_URL", cast=str, default="https://api.github.com")
 GITHUB_USER = config("GITHUB_USER", cast=str)
+
+# Deps Config
+DEPS_EXPORT_TO_SVG = config("DEPS_EXPORT_TO_SVG", cast=bool, default=False)

@@ -36,7 +36,9 @@ class DependenciesResolver:
             response = get(url=url, auth=self.auth)
 
             if response.status_code != 404:
-                return response.content.decode(encoding="UTF8")
+                info: str = response.content.decode(encoding="UTF8")
+
+                return info
 
         return ""
 
@@ -63,12 +65,16 @@ class DependenciesResolver:
                 if repo not in self.versions_by_service:
                     self.versions_by_service[repo] = []
 
-                available_version: str = cache.get(name=name)
+                info: dict[str, str] = cache.get(name=name)
+                available_version: str = info["available_version"]
+                release_url: str = info["release_url"]
+
                 self.versions_by_service[repo].append(
                     {
                         "dependency_name": name,
                         "current_version": version,
                         "available_version": available_version,
+                        "release_url": release_url,
                     }
                 )
 

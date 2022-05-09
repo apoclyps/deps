@@ -67,3 +67,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# exports
+dependencies.svg
