@@ -1,10 +1,12 @@
+import os
+import webbrowser
 from dataclasses import dataclass
 from typing import Any
 
 from rich.console import Console
 from rich.table import Table
 
-from deps.config import GITHUB_REPOSITORIES
+from deps.config import DEPS_EXPORT_TO_SVG, GITHUB_REPOSITORIES
 from deps.pipenv.resolver import DependenciesResolver
 
 
@@ -18,6 +20,8 @@ class DependenciesView:
 
     def __init__(self, console: Console) -> None:
         """Initialize the view"""
+        console.record = DEPS_EXPORT_TO_SVG
+
         self.used_versions_by_service = {}
         self.console = console
         self.resolver = DependenciesResolver()
@@ -37,28 +41,34 @@ class DependenciesView:
                     service_name=service_name,
                     dependencies=dependencies,
                 )
-                self.console.print(table)
+                self.console.print(table, justify="center")
         else:
             self.console.print("No dependencies found")
 
+        if DEPS_EXPORT_TO_SVG:
+            self.console.save_svg("dependencies.svg", title="dependencies.py")
+
+            webbrowser.open(f"file://{os.path.abspath('dependencies.svg')}")
+
     def render_service_dependencies(self, service_name: str, dependencies: list[dict[Any, Any]]) -> Table:
         """Render the service dependencies"""
-        table: Table = Table(title=service_name)
+        table: Table = Table(title=service_name, title_style="bold white", title_justify="center")
 
-        table.add_column("Dependency Name", style="white", no_wrap=True)
-        table.add_column("Current Version", style="red")
-        table.add_column("Available Version", justify="right", style="green")
+        table.add_column("Dependency Name", style="white", no_wrap=True, min_width=40)
+        table.add_column("Current Version", justify="right", style="red", min_width=30)
+        table.add_column("Available Version", justify="right", min_width=30)
 
         for dependency in dependencies:
             current_version: str = dependency["current_version"]
             available_version: str = dependency["available_version"]
+            release_url: str = dependency["release_url"]
 
             # filter out versions that are identical
             if current_version != available_version:
                 table.add_row(
                     dependency["dependency_name"],
                     current_version,
-                    available_version,
+                    f"[link={release_url}][green]{available_version}[/green][/]",
                 )
 
         return table
