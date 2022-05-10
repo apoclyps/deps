@@ -8,7 +8,7 @@ from requests.auth import HTTPBasicAuth
 from deps.config import GITHUB_ORG, GITHUB_TOKEN, GITHUB_USER
 from deps.storage import cache
 
-REGEX_PIPENV_DEPENDENCY_LINE = r"^(?P<name>.*)\s*\=\s*\"(?:==)?(?P<version>.*)\"$"
+REGEX_PIPENV_DEPENDENCY_LINE = r"^(?P<name>.*)\s*\=\s*\"\=\=?(?P<version>.*)\"$"
 REGEX_PIP_DEPENDENCY_LINE = r"^(?P<name>.*)==(?P<version>.*)$"
 
 

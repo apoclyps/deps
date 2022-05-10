@@ -2,7 +2,7 @@ version: "3.7"
 services:
   cli: &cli
     build: .
-    command: python -m deps dashboard
+    command: python -m deps check
     working_dir: /usr/src/app/
     environment:
       - DEBUG=true

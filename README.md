@@ -10,18 +10,24 @@ Simplify managing dependencies within an all-in-one TUI dashboard.
 
 ## How to use deps
 
+You will need to create a GITHUB_TOKEN with permissions via [Github > Settings > Developer Settings](https://github.com/settings/tokens/new) with the `repo` permissions to read public/private repositories and and `admin:org` for `read:org` if you wish to access an organisation that is not public.
+
 ```bash
 pip install deps
 
-export GITHUB_USER="github-username"
+# your github username
+export GITHUB_USER="user"
+# an individual or an organisation in which the repository exists
 export GITHUB_ORG="org"
+# a comma seperated list of repositories
 export GITHUB_REPOSITORIES="repo_1,repo_2"
+# your personal github token
 export GITHUB_TOKEN="secret"
 
 # optional - export to svg
 export DEPS_EXPORT_TO_SVG=false
 
-deps dashboard
+deps check
 ```
 
 ## Getting started with local development
@@ -36,7 +42,7 @@ $ python3 -m venv env
 $ source env/bin/activate
 (env)$ pip install -r requirements_dev.txt
 (env)$ pip install -r requirements.txt
-(env)$ python -m deps dashboard
+(env)$ python -m deps check
 ```
 
 If you wish to keep a copy of Deps on your host system, you can install and run it using:
@@ -51,14 +57,14 @@ deps -h
 You can run the Deps within Docker:
 
 ```bash
-docker-compose build cli && docker-compose run --rm cli python -m deps dashboard
+docker-compose build cli && docker-compose run --rm cli python -m deps check
 ```
 
 To build an image and run that image with all of the necessary dependencies using the following commands:
 
 ```bash
 docker-compose build cli
-docker-compose run --rm cli python -m deps dashboard
+docker-compose run --rm cli python -m deps check
 ```
 
 ## Testing
