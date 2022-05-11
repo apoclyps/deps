@@ -62,6 +62,9 @@ class DependenciesResolver:
                 # dependency does not match either pipfile or requirements.txt - skipping
                 continue
 
+            # replace invalid characters in the name
+            name = name.replace("=", "")
+
             if repo not in self.versions_by_service:
                 self.versions_by_service[repo] = []
 

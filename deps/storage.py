@@ -17,6 +17,9 @@ class PackageCache:
         """Retrieve the latest version of a package from PyPI"""
         response = requests.get(f"https://pypi.org/pypi/{name}/json")
 
+        if response.status_code != 200:
+            return
+
         if info := response.json()["info"]:
             self.cache[name] = {
                 "available_version": str(info["version"]),
