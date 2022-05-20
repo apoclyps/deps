@@ -16,4 +16,4 @@ pyupgrade==2.32.1
 types-click==7.1.8
 types-freezegun==1.1.9
 types-requests==2.27.27
-vulture==2.3
+vulture==2.4
