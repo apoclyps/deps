@@ -14,6 +14,6 @@ pylint==2.14.1
 pytest==7.1.2
 pyupgrade==2.34.0
 types-click==7.1.8
-types-freezegun==1.1.9
+types-freezegun==1.1.10
 types-requests==2.27.30
 vulture==2.4
