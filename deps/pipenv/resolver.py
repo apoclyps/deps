@@ -34,7 +34,7 @@ class DependenciesResolver:
         ]
 
         for url in urls:
-            response = get(url=url, auth=self.auth)
+            response = get(url=url, auth=self.auth, timeout=10)
 
             if response.status_code != 404:
                 info: str = response.content.decode(encoding="UTF8")
