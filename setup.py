@@ -6,7 +6,7 @@ def _requires_from_file(filename):
         return f.read().splitlines()
 
 
-with open("README.md", "r") as fh:
+with open("README.md") as fh:
     long_description = fh.read()
 
 
@@ -40,6 +40,8 @@ setup(
         "Operating System :: Microsoft :: Windows :: Windows 10",
         "Operating System :: Unix",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Topic :: Terminals",
     ],
 )

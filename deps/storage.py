@@ -15,7 +15,7 @@ class PackageCache:
 
     def retrieve(self, name: str) -> None:
         """Retrieve the latest version of a package from PyPI"""
-        response = requests.get(f"https://pypi.org/pypi/{name}/json")
+        response = requests.get(f"https://pypi.org/pypi/{name}/json", timeout=10)
 
         if response.status_code != 200:
             return
