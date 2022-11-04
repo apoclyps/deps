@@ -1,5 +1,6 @@
 import os
 import webbrowser
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from typing import Any
 
@@ -26,17 +27,25 @@ class DependenciesView:
         self.console = console
         self.resolver = DependenciesResolver()
 
+    def _retrieve(self, repo: str) -> dict:
+        file_dependencies: str = self.resolver.retrieve_file(repo=repo)
+
+        used_versions_by_service: dict = self.resolver.compare_package_versions(repo=repo, lines=file_dependencies)
+
+        return used_versions_by_service
+
     def render(self) -> None:
         """Render the view"""
-        for repo in GITHUB_REPOSITORIES:
-            file_dependencies: str = self.resolver.retrieve_file(repo=repo)
 
-            used_versions_by_service: dict = self.resolver.compare_package_versions(repo=repo, lines=file_dependencies)
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            used_versions_by_services: list[dict] = list(executor.map(self._retrieve, GITHUB_REPOSITORIES))
+
+        for used_versions_by_service in used_versions_by_services:
             if used_versions_by_service:
                 self.used_versions_by_service = self.used_versions_by_service | used_versions_by_service
 
-        if used_versions_by_service:
-            for service_name, dependencies in used_versions_by_service.items():
+        if self.used_versions_by_service:
+            for service_name, dependencies in self.used_versions_by_service.items():
                 table = self.render_service_dependencies(
                     service_name=service_name,
                     dependencies=dependencies,
