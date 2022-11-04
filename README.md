@@ -19,7 +19,7 @@ pip install deps
 export GITHUB_USER="user"
 # an individual or an organisation in which the repository exists
 export GITHUB_ORG="org"
-# a comma seperated list of repositories
+# a comma separated list of repositories
 export GITHUB_REPOSITORIES="repo_1,repo_2"
 # your personal github token
 export GITHUB_TOKEN="secret"
