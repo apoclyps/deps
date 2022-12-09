@@ -1,7 +1,6 @@
 # Deps Open Source Security Policies and Procedures
 
-This document outlines security procedures and general policies for the
-deps Open Source project as found on [https://github.com/atomist](https://github.com/apoclyps/deps).
+This document outlines security procedures and general policies for the deps Open Source project as found on [https://github.com/atomist](https://github.com/apoclyps/deps).
 
 ## Reporting a Vulnerability 
 
