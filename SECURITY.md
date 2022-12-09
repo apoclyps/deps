@@ -2,14 +2,14 @@
 
 This document outlines security procedures and general policies for the deps Open Source project as found on [https://github.com/atomist](https://github.com/apoclyps/deps).
 
-## Reporting a Vulnerability 
+## Reporting a Vulnerability
 
-The deps team and community take all security vulnerabilities seriously. 
-Thank you for improving the security of our open source  software. 
+The deps team and community take all security vulnerabilities seriously.
+Thank you for improving the security of our open source  software.
 We appreciate your efforts and responsible disclosure and will make every effort to acknowledge your contributions.
 
 Report security vulnerabilities by emailing the maintain of this project at:
-    
+
     kyle.harrison.dev+security@gmail.com
 
 The maintainer will acknowledge your email within 72 hours, and will send a more detailed response within 7 days indicating the next steps in handling your report. After the initial reply to your report, the maintainer will endeavor to keep you informed of the progress towards a fix and full announcement, and may ask for additional information or guidance.

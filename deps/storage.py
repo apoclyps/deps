@@ -1,6 +1,19 @@
 from dataclasses import dataclass
+from http import HTTPStatus
 
 import requests
+from requests.exceptions import ConnectionError as HTTPConnectionError, HTTPError
+from retrying import retry
+
+from deps.config import EXTERNAL_SERVICE_MAXIMUM_REQUEST_ATTEMPTS, EXTERNAL_SERVICE_WAIT_IN_MS_BETWEEN_REQUESTS
+
+
+def retry_if_connection_or_http_error(exception: Exception) -> bool:
+    """Retries on connection and HTTP errors"""
+    if isinstance(exception, (HTTPConnectionError, HTTPError)):
+        return True
+
+    return False
 
 
 @dataclass
@@ -13,12 +26,17 @@ class PackageCache:
         """Initialize the cache"""
         self.cache: dict[str, str] = {}
 
+    @retry(
+        retry_on_exception=retry_if_connection_or_http_error,
+        stop_max_attempt_number=EXTERNAL_SERVICE_MAXIMUM_REQUEST_ATTEMPTS,
+        wait_exponential_multiplier=EXTERNAL_SERVICE_WAIT_IN_MS_BETWEEN_REQUESTS,
+    )
     def retrieve(self, name: str) -> None:
         """Retrieve the latest version of a package from PyPI"""
         response = requests.get(f"https://pypi.org/pypi/{name}/json", timeout=10)
 
-        if response.status_code != 200:
-            return
+        if response.status_code is not HTTPStatus.OK:
+            response.raise_for_status()
 
         if info := response.json()["info"]:
             self.cache[name] = {

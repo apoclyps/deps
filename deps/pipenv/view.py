@@ -37,7 +37,7 @@ class DependenciesView:
     def render(self) -> None:
         """Render the view"""
 
-        with ThreadPoolExecutor(max_workers=10) as executor:
+        with ThreadPoolExecutor(max_workers=5) as executor:
             used_versions_by_services: list[dict] = list(executor.map(self._retrieve, GITHUB_REPOSITORIES))
 
         for used_versions_by_service in used_versions_by_services:
