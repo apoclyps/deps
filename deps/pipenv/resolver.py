@@ -2,10 +2,11 @@ from dataclasses import dataclass
 from re import match
 from typing import Optional
 
+import toml
 from requests import get
 from requests.auth import HTTPBasicAuth
 
-from deps.config import GITHUB_ORG, GITHUB_TOKEN, GITHUB_USER
+from deps.config import GITHUB_TOKEN, GITHUB_USER
 from deps.storage import cache
 
 REGEX_PIPENV_DEPENDENCY_LINE = r"^(?P<name>.*)\s*\=\s*\"\=\=?(?P<version>.*)\"$"
@@ -24,29 +25,22 @@ class DependenciesResolver:
         self.versions_by_service = {}
         self.auth = HTTPBasicAuth(GITHUB_USER, GITHUB_TOKEN)
 
-    def retrieve_file(self, repo: str) -> str:
+    def retrieve_file(self, repo: str, urls: list[str]) -> str | None:
         """Retrieve the Pipfile from GitHub"""
-        urls = [
-            f"https://raw.githubusercontent.com/{GITHUB_ORG}/{repo}/main/Pipfile",
-            f"https://raw.githubusercontent.com/{GITHUB_ORG}/{repo}/master/Pipfile",
-            f"https://raw.githubusercontent.com/{GITHUB_ORG}/{repo}/main/requirements.txt",
-            f"https://raw.githubusercontent.com/{GITHUB_ORG}/{repo}/master/requirements.txt",
-        ]
-
         for url in urls:
             response = get(url=url, auth=self.auth, timeout=10)
 
-            if response.status_code != 404:
+            if response.status_code == 200:
                 info: str = response.content.decode(encoding="UTF8")
 
                 return info
 
-        return ""
+        return None
 
-    def compare_package_versions(self, repo: str, lines: str) -> dict:
+    def compare_package_versions(self, repo: str, lines: str | None) -> dict:
         """Compare the package versions"""
         if not lines:
-            return {}
+            return self.versions_by_service
 
         for line in lines.split("\n"):
             name: Optional[str] = None
@@ -65,10 +59,18 @@ class DependenciesResolver:
             # replace invalid characters in the name
             name = name.replace("=", "")
 
-            if repo not in self.versions_by_service:
-                self.versions_by_service[repo] = []
+            self._add_version_by_service(repo=repo, name=name, version=version)
 
-            info: dict[str, str] = cache.get(name=name)
+        return self.versions_by_service
+
+    def _add_version_by_service(self, repo: str, name: str, version: str) -> None:
+        """Adds a package name and version to the versions used by that service"""
+        if repo not in self.versions_by_service:
+            self.versions_by_service[repo] = []
+
+        info: dict[str, str] | None = cache.get(name=name)
+
+        if info:
             available_version: str = info["available_version"]
             release_url: str = info["release_url"]
 
@@ -80,5 +82,18 @@ class DependenciesResolver:
                     "release_url": release_url,
                 }
             )
+
+    def extract_package_versions(self, repo: str, content: str | None) -> dict:
+        """Compare the package versions"""
+        if not content:
+            return self.versions_by_service
+
+        data = toml.loads(content)
+
+        for name, version in data["tool"]["poetry"]["dependencies"].items():
+            self._add_version_by_service(repo=repo, name=name, version=version)
+
+        for name, version in data["tool"]["poetry"]["dev-dependencies"].items():
+            self._add_version_by_service(repo=repo, name=name, version=version)
 
         return self.versions_by_service

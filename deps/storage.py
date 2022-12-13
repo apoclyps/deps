@@ -35,19 +35,23 @@ class PackageCache:
         """Retrieve the latest version of a package from PyPI"""
         response = requests.get(f"https://pypi.org/pypi/{name}/json", timeout=10)
 
-        if response.status_code is not HTTPStatus.OK:
+        if response.status_code != HTTPStatus.OK or response.status_code != HTTPStatus.NOT_FOUND:
             response.raise_for_status()
 
-        if info := response.json()["info"]:
-            self.cache[name] = {
-                "available_version": str(info["version"]),
-                "release_url": str(info["release_url"]),
-            }
+        if response.status_code != HTTPStatus.NOT_FOUND:
+            if info := response.json().get("info"):
+                self.cache[name] = {
+                    "available_version": str(info["version"]),
+                    "release_url": str(info["release_url"]),
+                }
 
-    def get(self, name: str) -> dict[str, str]:
+    def get(self, name: str) -> dict[str, str] | None:
         """Get the latest version of a package from the cache"""
         if name not in self.cache:
             self.retrieve(name)
+
+        if name not in self.cache:
+            return None
 
         return self.cache[name]
 
