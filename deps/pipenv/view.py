@@ -7,7 +7,7 @@ from typing import Any
 from rich.console import Console
 from rich.table import Table
 
-from deps.config import DEPS_EXPORT_TO_SVG, GITHUB_REPOSITORIES
+from deps.config import DEPS_EXPORT_TO_SVG, GITHUB_ORG, GITHUB_REPOSITORIES
 from deps.pipenv.resolver import DependenciesResolver
 
 
@@ -28,9 +28,43 @@ class DependenciesView:
         self.resolver = DependenciesResolver()
 
     def _retrieve(self, repo: str) -> dict:
-        file_dependencies: str = self.resolver.retrieve_file(repo=repo)
 
-        used_versions_by_service: dict = self.resolver.compare_package_versions(repo=repo, lines=file_dependencies)
+        is_requirements: bool = False
+        is_pipenv: bool = False
+        is_poetry: bool = False
+
+        requirements_urls: list[str] = [
+            f"https://raw.githubusercontent.com/{GITHUB_ORG}/{repo}/main/requirements.txt",
+            f"https://raw.githubusercontent.com/{GITHUB_ORG}/{repo}/master/requirements.txt",
+        ]
+
+        pipenv_urls: list[str] = [
+            f"https://raw.githubusercontent.com/{GITHUB_ORG}/{repo}/main/Pipfile",
+            f"https://raw.githubusercontent.com/{GITHUB_ORG}/{repo}/master/Pipfile",
+        ]
+
+        poetry_urls: list[str] = [
+            f"https://raw.githubusercontent.com/{GITHUB_ORG}/{repo}/main/pyproject.toml",
+            f"https://raw.githubusercontent.com/{GITHUB_ORG}/{repo}/master/pyproject.txt",
+        ]
+
+        file_dependencies: str | None = self.resolver.retrieve_file(repo=repo, urls=requirements_urls)
+        is_requirements = bool(file_dependencies)
+
+        if not is_requirements:
+            file_dependencies = self.resolver.retrieve_file(repo=repo, urls=pipenv_urls)
+            is_pipenv = bool(file_dependencies)
+
+        if not is_pipenv:
+            file_dependencies = self.resolver.retrieve_file(repo=repo, urls=poetry_urls)
+            is_poetry = bool(file_dependencies)
+
+        used_versions_by_service: dict = {}
+
+        if is_requirements or is_pipenv:
+            used_versions_by_service = self.resolver.compare_package_versions(repo=repo, lines=file_dependencies)
+        elif is_poetry:
+            used_versions_by_service = self.resolver.extract_package_versions(repo=repo, content=file_dependencies)
 
         return used_versions_by_service
 
