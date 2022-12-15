@@ -1,6 +1,12 @@
+import os
+
 from decouple import AutoConfig, Csv
 
-config = AutoConfig()
+# configures decouple to use settings.ini or .env file from another directory
+if DEPS_PATH_TO_CONFIG := os.environ.get("DEPS_PATH_TO_CONFIG", None):
+    config = AutoConfig(search_path=DEPS_PATH_TO_CONFIG)
+else:
+    config = AutoConfig(search_path=".")
 
 
 # Github Config

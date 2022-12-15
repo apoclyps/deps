@@ -35,7 +35,7 @@ class PackageCache:
         """Retrieve the latest version of a package from PyPI"""
         response = requests.get(f"https://pypi.org/pypi/{name}/json", timeout=10)
 
-        if response.status_code != HTTPStatus.OK or response.status_code != HTTPStatus.NOT_FOUND:
+        if response.status_code not in (HTTPStatus.OK, HTTPStatus.NOT_FOUND):
             response.raise_for_status()
 
         if response.status_code != HTTPStatus.NOT_FOUND:
