@@ -1,6 +1,7 @@
 import click
 from rich.console import Console
 
+from deps.environment_configuration.view import EnvironmentConfigurationView
 from deps.pipenv.view import DependenciesView
 
 from ..version import __version__
@@ -25,6 +26,20 @@ def check() -> None:
     """
     console = Console()
     DependenciesView(console=console).render()
+
+
+@cli.command(help="Show the current configuration used by Deps")
+@click.option("-show", "--show/--hide", default=False, is_flag=True)
+def config(show: bool) -> None:
+    """
+    Command:\n
+        deps config
+    Usage:\n
+        deps config --show \n
+        deps config --hide \n
+    """
+    console = Console()
+    EnvironmentConfigurationView(console=console).render(show=show)
 
 
 def main() -> None:

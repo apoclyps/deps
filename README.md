@@ -30,6 +30,58 @@ export DEPS_EXPORT_TO_SVG=false
 deps check
 ```
 
+### Configuration
+
+Deps supports both .ini and .env files. Deps always searches for configuration in this order:
+
+* Environment variables;
+* Repository: ini or .env file;
+* Configuration Path
+* Review Defaults
+
+The following steps are used to provide the configuration using a `.env` or `.ini` file. The configuration can be read from within the module/repository (default location set by decouple) using the `.env` file or via a location specified by an environmental variable that points to a `.ini` file located in the root of the project or in a location specified by `PATH_TO_CONFIG`.
+
+#### Using an `.env` file within the repository
+
+```bash
+cd /home/<your-user>/workspace/apoclyps/deps
+touch .env
+
+echo "GITHUB_ORG=apoclyps" >> .env
+echo "GITHUB_REPOSITORIES=micropython-by-example" >> .env
+python -m deps config
+```
+
+#### Using an `.ini` file within the repository
+
+```bash
+cd /home/<your-user>/workspace/apoclyps/deps
+touch settings.ini
+echo "[settings]\nGITHUB_ORG=apoclyps\nGITHUB_REPOSITORIES=micropython-by-example" >> settings.ini
+
+python -m deps config
+```
+
+#### Providing a configuration path
+
+If you wish to set the configuration path to use an `ini` or `.env` file when running the application, you can use the configuration of a specific file by supplying the path to the configuration like so:
+
+```bash
+cd /home/apoclyps/
+touch settings.ini
+echo "[settings]\nGITHUB_ORG=apoclyps\nGITHUB_REPOSITORIES=micropython-by-example" >> settings.ini
+
+cd /home/<your-user>/workspace/apoclyps/deps
+export DEPS_PATH_TO_CONFIG=/home/<your-user>/
+
+python -m deps config
+```
+
+If at any time, you want to confirm your configuration reflects the file you have provided, you can use `deps config` to view what current configuration of Deps.
+
+#### Configuring Layout
+
+
 ## Getting started with local development
 
 To build and run the CLI on your host, you will need Python 3.9 or greater, pip, and virtualenv to build and run `deps`.
