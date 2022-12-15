@@ -88,12 +88,15 @@ class DependenciesResolver:
         if not content:
             return self.versions_by_service
 
-        data = toml.loads(content)
+        data: dict = toml.loads(content)
+        poetry_sections: dict = data.get("tool", {}).get("poetry", {})
 
-        for name, version in data["tool"]["poetry"]["dependencies"].items():
+        for name, version in poetry_sections.get("dependencies", {}).items():
+            version = version.replace("=", "")
             self._add_version_by_service(repo=repo, name=name, version=version)
 
-        for name, version in data["tool"]["poetry"]["dev-dependencies"].items():
+        for name, version in poetry_sections.get("dev-dependencies", {}).items():
+            version = version.replace("=", "")
             self._add_version_by_service(repo=repo, name=name, version=version)
 
         return self.versions_by_service
