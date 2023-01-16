@@ -47,16 +47,7 @@ test: build.test network ## Run the unit tests and linters
 
 lint: ## lint and autocorrect the code
 	@docker-compose build test
-	@docker-compose run --rm --no-deps test
-	@docker-compose run --rm --no-deps test isort .
-	@docker-compose run --rm --no-deps test black --line-length 119 --check .
-	@docker-compose run --rm --no-deps test mypy .
-	@docker-compose run --rm --no-deps test flake8 .
-	@docker-compose run --rm --no-deps test pylint --rcfile=.pylintrc deps
-	@docker-compose run --rm --no-deps test bandit deps
-	@docker-compose run --rm --no-deps test vulture --min-confidence 90 deps
-	@docker-compose run --rm --no-deps test codespell deps
-	@docker-compose run --rm --no-deps test find . -name '*.py' -exec pyupgrade {} +
+	@docker-compose run --rm --no-deps test isort . && black --check . && mypy . && flake8 . && pylint --rcfile=.pylintrc deps && bandit deps && vulture --min-confidence 90 deps && codespell deps && find . -name '*.py' -exec pyupgrade {} +
 
 
 install: ## build and install the cli
