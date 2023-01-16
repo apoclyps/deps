@@ -34,10 +34,10 @@ deps check
 
 Deps supports both .ini and .env files. Deps always searches for configuration in this order:
 
-* Environment variables;
-* Repository: ini or .env file;
-* Configuration Path
-* Review Defaults
+- Environment variables;
+- Repository: ini or .env file;
+- Configuration Path
+- Review Defaults
 
 The following steps are used to provide the configuration using a `.env` or `.ini` file. The configuration can be read from within the module/repository (default location set by decouple) using the `.env` file or via a location specified by an environmental variable that points to a `.ini` file located in the root of the project or in a location specified by `PATH_TO_CONFIG`.
 
@@ -80,7 +80,6 @@ python -m deps config
 If at any time, you want to confirm your configuration reflects the file you have provided, you can use `deps config` to view what current configuration of Deps.
 
 #### Configuring Layout
-
 
 ## Getting started with local development
 
@@ -137,7 +136,7 @@ To run individual linting steps:
 make lint
 ```
 
-You can also set up ``pre-commit`` to run the linting steps automatically during the commit phase,
+You can also set up `pre-commit` to run the linting steps automatically during the commit phase,
 the pre-commit pipeline can be set up by running the following command on the project root:
 
 ```bash

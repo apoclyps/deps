@@ -1,0 +1,44 @@
+[tool.codespell]
+quiet-level = 3
+builtin = "clear,rare,informal,code,names"
+ignore-words-list = "pullrequest"
+
+[tool.isort]
+profile="black"
+combine_as_imports=true
+default_section="THIRDPARTY"
+force_grid_wrap=0
+include_trailing_comma=true
+known_first_party=["deps", "app", "lib"]
+line_length=119
+multi_line_output=3
+skip=[".git", "__pycache", ".venv", "settings", ".tox"]
+use_parentheses=true
+
+[tool.black]
+line_length=119
+
+[tool.mypy]
+ignore_missing_imports=true
+pretty=true
+
+[[tool.mypy.overrides]]
+module = "app.*"
+ignore_missing_imports=false
+disallow_untyped_defs=true
+
+[[tool.mypy.overrides]]
+module = "lib.*"
+ignore_missing_imports=false
+disallow_untyped_defs=true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs=true
+
+[tool.pytest.ini_options]
+addopts = "-vvv -s "
+testpaths = [
+    "app",
+    "tests",
+]

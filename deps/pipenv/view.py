@@ -45,7 +45,7 @@ class DependenciesView:
 
         poetry_urls: list[str] = [
             f"https://raw.githubusercontent.com/{GITHUB_ORG}/{repo}/main/pyproject.toml",
-            f"https://raw.githubusercontent.com/{GITHUB_ORG}/{repo}/master/pyproject.txt",
+            f"https://raw.githubusercontent.com/{GITHUB_ORG}/{repo}/master/pyproject.toml",
         ]
 
         file_dependencies: str | None = self.resolver.retrieve_file(repo=repo, urls=requirements_urls)
