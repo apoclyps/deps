@@ -48,8 +48,17 @@ repos:
     hooks:
       - id: check-useless-excludes
 
+  - repo: local
+    hooks:
+    -   id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        exclude: tests
+
   - repo: https://github.com/ambv/black
-    rev: 22.12.0
+    rev: 23.1.0
     hooks:
       - id: black
         args:
@@ -66,7 +75,7 @@ repos:
           - B101,B311,B105
 
   - repo: https://github.com/jendrikseipp/vulture
-    rev: v2.6
+    rev: v2.7
     hooks:
       - id: vulture
         description: Find dead Python code
@@ -104,14 +113,14 @@ repos:
       - id: flake8
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.11.2
+    rev: 5.12.0
     hooks:
       - id: isort
         name: isort (python)
         args: ["--settings-path", "pyproject.toml", "."]
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.32.2
+    rev: v0.33.0
     hooks:
       - id: markdownlint-fix
         args: ["--disable", "line-length"]

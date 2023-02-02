@@ -28,7 +28,6 @@ class DependenciesView:
         self.resolver = DependenciesResolver()
 
     def _retrieve(self, repo: str) -> dict:
-
         is_requirements: bool = False
         is_pipenv: bool = False
         is_poetry: bool = False
