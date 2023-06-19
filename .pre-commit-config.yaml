@@ -103,7 +103,7 @@ repos:
           - tomli
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.6.0
+    rev: v3.7.0
     hooks:
       - id: pyupgrade
 
@@ -120,7 +120,7 @@ repos:
         args: ["--settings-path", "pyproject.toml", "."]
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.34.0
+    rev: v0.35.0
     hooks:
       - id: markdownlint-fix
         args: ["--disable", "line-length"]
