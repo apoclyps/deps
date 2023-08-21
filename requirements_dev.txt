@@ -17,4 +17,4 @@ types-click==7.1.8
 types-freezegun==1.1.10
 types-requests==2.31.0.2
 types-toml==0.10.8.7
-vulture==2.8
+vulture==2.9
