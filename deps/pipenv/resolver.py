@@ -98,7 +98,7 @@ class DependenciesResolver:
             version = version.replace("=", "")
             self._add_version_by_service(repo=repo, name=name, version=version)
 
-        for name, version in poetry_sections.get("dev-dependencies", {}).items():
+        for name, version in poetry_sections.get("group", {}).get("dev", {}).get("dependencies", {}).items():
             if not isinstance(version, str):
                 continue
 
