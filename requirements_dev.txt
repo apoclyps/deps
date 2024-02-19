@@ -15,6 +15,6 @@ pytest==7.4.2
 pyupgrade==3.10.1
 types-click==7.1.8
 types-freezegun==1.1.10
-types-requests==2.31.0.2
+types-requests==2.31.0.20240218
 types-toml==0.10.8.7
 vulture==2.8
