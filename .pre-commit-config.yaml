@@ -58,7 +58,7 @@ repos:
         exclude: tests
 
   - repo: https://github.com/ambv/black
-    rev: 24.4.0
+    rev: 24.4.2
     hooks:
       - id: black
         args:
