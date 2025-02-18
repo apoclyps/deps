@@ -65,7 +65,7 @@ repos:
           - --line-length=119
 
   - repo: https://github.com/PyCQA/bandit
-    rev: 1.8.2
+    rev: 1.8.3
     hooks:
       - id: bandit
         description: Security oriented static analyser for python code
@@ -108,7 +108,7 @@ repos:
       - id: pyupgrade
 
   - repo: https://github.com/pycqa/flake8
-    rev: 7.1.1
+    rev: 7.1.2
     hooks:
       - id: flake8
 
