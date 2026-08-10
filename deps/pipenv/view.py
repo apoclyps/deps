@@ -99,6 +99,7 @@ class DependenciesView:
         table.add_column("Dependency Name", style="white", no_wrap=True, min_width=40)
         table.add_column("Current Version", justify="right", style="red", min_width=30)
         table.add_column("Available Version", justify="right", min_width=30)
+        table.add_column("Type", justify="center", style="blue")
 
         for dependency in dependencies:
             current_version: str = dependency["current_version"]
@@ -107,10 +108,35 @@ class DependenciesView:
 
             # filter out versions that are identical
             if current_version != available_version:
+                upgrade_type = self._get_upgrade_type(current_version, available_version)
                 table.add_row(
                     dependency["dependency_name"],
                     current_version,
                     f"[link={release_url}][green]{available_version}[/green][/]",
+                    upgrade_type,
                 )
 
         return table
+
+    @staticmethod
+    def _get_upgrade_type(current: str, available: str) -> str:
+        def parse(v: str) -> list[int]:
+            parts = []
+            for p in v.split("."):
+                try:
+                    parts.append(int(p))
+                except ValueError:
+                    nums = "".join(filter(str.isdigit, p))
+                    parts.append(int(nums) if nums else 0)
+            return parts + [0] * (3 - len(parts))
+
+        cur = parse(current)
+        avail = parse(available)
+
+        if avail[0] > cur[0]:
+            return "major"
+        elif avail[1] > cur[1]:
+            return "minor"
+        elif avail[2] > cur[2]:
+            return "patch"
+        return "patch"
